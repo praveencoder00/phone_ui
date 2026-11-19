@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "phone_ui",
+      "request": "launch",
+      "type": "dart",
+      "env": {
+        "GDK_BACKEND": "x11"
+      }
+    }
+  ]
+}
