@@ -1,132 +1,54 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:phone_ui/display.dart';
+import 'package:phone_ui/status_bar.dart';
+import 'package:phone_ui/utils.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const PhoneApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class PhoneApp extends StatelessWidget {
+  const PhoneApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        brightness: Brightness.dark,
+        useMaterial3: true,
+        scaffoldBackgroundColor: C.bg,
+        // Non-shader ripple: lighter on a Pi GPU than the default sparkle.
+        splashFactory: InkRipple.splashFactory,
+        colorScheme: const ColorScheme.dark(
+          primary: C.orchid,
+          onPrimary: Colors.white,
+          secondary: C.rose,
+          surface: C.surface,
+          onSurface: C.text,
+          outline: C.muted,
+        ),
+        sliderTheme: SliderThemeData(
+          trackHeight: 4,
+          overlayShape: SliderComponentShape.noOverlay,
+          inactiveTrackColor: C.line,
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      builder: (context, child) => ColoredBox(
+        color: Colors.black,
+        child: Center(
+          child: FittedBox(
+            child: SizedBox(width: 320, height: 480, child: child),
+          ),
+        ),
+      ),
+      home: const Shell(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  String place ='nil';
-  void whenDown(String pressedPlace) {
-
-setState(() {
-  place= pressedPlace;
-});
-
-  }
-   void whenUp() {
-
-setState(() {
-  place= 'nil';
-});
-
-  }
-
-  @override
-  Widget build(BuildContext context) {
-  
-    return Scaffold(
-     body: Padding(
-       padding: const EdgeInsets.all(24.0),
-       child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTapDown:(details)=>whenDown('top left') ,
-                onTapUp: (details)=>whenUp(),
-                onTapCancel:  ()=>whenUp(),
-                child: ElevatedButton(onPressed: (){},  child: Text("top left"))),
-              Text('Touched at $place'),
-              GestureDetector(
-                onTapDown:(details)=>whenDown('top right') ,
-               onTapCancel:  ()=>whenUp(),
-                child: ElevatedButton(onPressed: (){},  child: Text("top right"))),
-              
-       
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-               GestureDetector(
-                onTapDown:(details)=>whenDown('centre') ,
-                 onTapCancel:  ()=>whenUp(),   
-                child: ElevatedButton(onPressed: (){},  child: Text("centre"))),
-             
-            ],
-          ),
-           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-               GestureDetector(
-                onTapDown:(details)=>whenDown('bottom left') ,
-                 onTapCancel:  ()=>whenUp(),   
-                child: ElevatedButton(onPressed: (){},  child: Text("bottom left"))),
-               GestureDetector(
-                onTapDown:(details)=>whenDown('bottom right') ,
-                 onTapCancel:  ()=>whenUp(),   
-                child: ElevatedButton(onPressed: (){},  child: Text("bottom right"))),
-       
-            ],
-          )
-          
-          
-       
-        ],
-       ),
-     ),
-    );
-  }
-}
